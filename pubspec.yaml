@@ -30,8 +30,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  provider: ^6.1.5+1
-
+  firebase_core: ^2.29.0
+  firebase_auth: ^4.19.0
+  curved_navigation_bar: ^1.0.6
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
@@ -74,15 +75,7 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  fonts:
-  - family: bold
-    fonts:
-       - asset: assets/fonts/Poppins-Bold.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  - family: regular
-    fonts:
-       - asset: assets/fonts/Poppins-Regular.ttf
+ 
       
   #         weight: 700
   #
