@@ -1,7 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/pages/bottomnav.dart';
 import 'package:myapp/pages/login.dart';
+import 'package:myapp/services/database.dart';
+import 'package:myapp/services/shared_pref.dart';
 import 'package:myapp/widget/support_widget.dart';
+import 'package:random_string/random_string.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -16,6 +20,65 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController passwordController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+
+  registration() async {
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.greenAccent,
+          content: Text(
+            "Registered Successfully",
+            style: TextStyle(fontSize: 20.0),
+          ),
+        ),
+      );
+      String Id = randomAlphaNumeric(10);
+      await SharedPreferenceHelper().saveUserEmail(emailController.text);
+      await SharedPreferenceHelper().saveUserId(Id);
+      await SharedPreferenceHelper().saveUserName(nameController.text);
+      await SharedPreferenceHelper().saveUserImage("https://www.gstatic.com/images/branding/productlogos/flutter/v6/192px.svg");
+
+      Map<String, dynamic> userInfoMap = {
+        "Name": nameController.text,
+        "Email": emailController.text,
+        "Id": Id,
+        "Image":
+            "https://www.gstatic.com/images/branding/productlogos/flutter/v6/192px.svg",
+      };
+      await DatabaseMethods().addUserDetails(userInfoMap, Id);
+      // After successful registration, navigate to home
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const BottamNav()),
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: Colors.redAccent,
+            content: Text(
+              "Password Provided is too Weak",
+              style: TextStyle(fontSize: 18.0),
+            ),
+          ),
+        );
+      } else if (e.code == "email-already-in-use") {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: Colors.redAccent,
+            content: Text(
+              "Account Already exists",
+              style: TextStyle(fontSize: 18.0),
+            ),
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +112,7 @@ class _SignUpState extends State<SignUp> {
 
                 // Name Field
                 Text("Name", style: AppWidget.semiboldTextFieldStyle()),
+                SizedBox(height: 20),
                 Container(
                   padding: const EdgeInsets.only(left: 20),
                   decoration: BoxDecoration(
@@ -73,6 +137,7 @@ class _SignUpState extends State<SignUp> {
 
                 // Email Field
                 Text("Email", style: AppWidget.semiboldTextFieldStyle()),
+                SizedBox(height: 20),
                 Container(
                   padding: const EdgeInsets.only(left: 20),
                   decoration: BoxDecoration(
@@ -99,6 +164,7 @@ class _SignUpState extends State<SignUp> {
 
                 // Password Field
                 Text("Password", style: AppWidget.semiboldTextFieldStyle()),
+                SizedBox(height: 20),
                 Container(
                   padding: const EdgeInsets.only(left: 20),
                   decoration: BoxDecoration(
@@ -107,7 +173,7 @@ class _SignUpState extends State<SignUp> {
                   ),
                   child: TextFormField(
                     controller: passwordController,
-                    obscureText: true,
+                    // obscureText: true,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "Please enter your password";
@@ -144,10 +210,7 @@ class _SignUpState extends State<SignUp> {
                 GestureDetector(
                   onTap: () {
                     if (_formKey.currentState!.validate()) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const BottamNav()),
-                      );
+                      registration();
                     }
                   },
                   child: Center(
