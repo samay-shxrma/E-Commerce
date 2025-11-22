@@ -62,7 +62,7 @@ class _SignUpState extends State<SignUp> {
             backgroundColor: Colors.redAccent,
             content: Text(
               "Password Provided is too Weak",
-              style: TextStyle(fontSize: 18.0),
+              style: TextStyle(fontSize: 20.0),
             ),
           ),
         );
@@ -72,7 +72,7 @@ class _SignUpState extends State<SignUp> {
             backgroundColor: Colors.redAccent,
             content: Text(
               "Account Already exists",
-              style: TextStyle(fontSize: 18.0),
+              style: TextStyle(fontSize: 20.0),
             ),
           ),
         );
