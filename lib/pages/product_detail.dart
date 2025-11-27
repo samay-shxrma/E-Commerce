@@ -2,7 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:myapp/widget/support_widget.dart';
 
 class ProductDetail extends StatefulWidget {
-  const ProductDetail({super.key});
+  String image, name, detail, price;
+  ProductDetail({
+    required this.detail,
+    required this.image,
+    required this.name,
+    required this.price,
+  });
 
   @override
   State<ProductDetail> createState() => _ProductDetailState();
@@ -21,6 +27,13 @@ class _ProductDetailState extends State<ProductDetail> {
             children: [
               Stack(
                 children: [
+                  Center(
+                    child: Image.network(
+                      widget.image,
+                      height: 400,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
                   GestureDetector(
                     onTap: () {
                       Navigator.pop(context);
@@ -33,12 +46,6 @@ class _ProductDetailState extends State<ProductDetail> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: Icon(Icons.arrow_back_ios_new_outlined),
-                    ),
-                  ),
-                  Center(
-                    child: Image.asset(
-                      "assets/images/headphone2.png",
-                      height: 400,
                     ),
                   ),
                 ],
@@ -58,14 +65,13 @@ class _ProductDetailState extends State<ProductDetail> {
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
                       children: [
                         Text(
-                          "Headphone",
+                          widget.name,
                           style: AppWidget.boldTextFieldStyle(),
                         ),
                         Text(
-                          "\$300",
+                          "\$" + widget.price,
                           style: TextStyle(
                             color: Color(0xFFfd6f3e),
                             fontSize: 23,
@@ -77,17 +83,13 @@ class _ProductDetailState extends State<ProductDetail> {
                     SizedBox(height: 20),
                     Text("Details", style: AppWidget.semiboldTextFieldStyle()),
                     SizedBox(height: 10),
-                    Text(
-                      "Immerse yourself in an unparalleled audio experience with our flagship audiophile headphones. Designed for the most discerning listeners, these headphones reproduce sound with breathtaking clarity, revealing every subtle nuance and detail of your favorite tracks.",
-                    ),
+                    Text(widget.detail),
                     SizedBox(height: 90),
                     Container(
                       width: MediaQuery.of(context).size.width,
-
                       padding: EdgeInsets.symmetric(vertical: 10),
                       decoration: BoxDecoration(
                         color: Color(0xFFfd6f3e),
-
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Center(

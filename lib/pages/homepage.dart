@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/pages/category_products.dart';
 import 'package:myapp/widget/support_widget.dart';
 
 class Home extends StatefulWidget {
@@ -15,6 +16,8 @@ class _HomeState extends State<Home> {
     "assets/images/watch.png",
     "assets/images/TV.png",
   ];
+
+  List Categoryname = ["Headphones", "Laptop", "Watch", "TV"];
 
   List<Map<String, dynamic>> allProducts = [
     {
@@ -140,7 +143,10 @@ class _HomeState extends State<Home> {
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
-                          return CategoryTile(image: categories[index]);
+                          return CategoryTile(
+                            image: categories[index],
+                            name: Categoryname[index],
+                          );
                         },
                       ),
                     ),
@@ -238,28 +244,38 @@ class _HomeState extends State<Home> {
 }
 
 class CategoryTile extends StatelessWidget {
-  String image;
+  String image, name;
 
-  CategoryTile({required this.image});
+  CategoryTile({required this.image, required this.name});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(20),
-      margin: EdgeInsets.only(right: 20),
-      // height: 90,
-      // width: 90,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Image.asset(image, height: 50, width: 50, fit: BoxFit.cover),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CategoryProduct(category: name),
+          ),
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.all(20),
+        margin: EdgeInsets.only(right: 20),
+        // height: 90,
+        // width: 90,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Image.asset(image, height: 50, width: 50, fit: BoxFit.cover),
 
-          Icon(Icons.arrow_forward),
-        ],
+            Icon(Icons.arrow_forward),
+          ],
+        ),
       ),
     );
   }
