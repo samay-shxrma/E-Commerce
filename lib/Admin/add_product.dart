@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -37,13 +36,18 @@ class _AddProductState extends State<AddProduct> {
         detailController.text.isNotEmpty &&
         value != null) {
       String addId = randomAlphaNumeric(10);
-      Reference firebaseStorageRef =
-          FirebaseStorage.instance.ref().child("blogImage").child(addId);
+      Reference firebaseStorageRef = FirebaseStorage.instance
+          .ref()
+          .child("blogImage")
+          .child(addId);
 
       try {
-        final TaskSnapshot snapshot = kIsWeb
-            ? await firebaseStorageRef.putData(await selectedImage!.readAsBytes())
-            : await firebaseStorageRef.putFile(File(selectedImage!.path));
+        final TaskSnapshot snapshot =
+            kIsWeb
+                ? await firebaseStorageRef.putData(
+                  await selectedImage!.readAsBytes(),
+                )
+                : await firebaseStorageRef.putFile(File(selectedImage!.path));
 
         var downloadUrl = await snapshot.ref.getDownloadURL();
 
@@ -129,20 +133,22 @@ class _AddProductState extends State<AddProduct> {
                         border: Border.all(color: Colors.black, width: 1.5),
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: selectedImage == null
-                          ? const Icon(Icons.camera_alt_outlined)
-                          : ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: kIsWeb
-                                  ? Image.network(
-                                      selectedImage!.path,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Image.file(
-                                      File(selectedImage!.path),
-                                      fit: BoxFit.cover,
-                                    ),
-                            ),
+                      child:
+                          selectedImage == null
+                              ? const Icon(Icons.camera_alt_outlined)
+                              : ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child:
+                                    kIsWeb
+                                        ? Image.network(
+                                          selectedImage!.path,
+                                          fit: BoxFit.cover,
+                                        )
+                                        : Image.file(
+                                          File(selectedImage!.path),
+                                          fit: BoxFit.cover,
+                                        ),
+                              ),
                     ),
                   ),
                 ),
@@ -179,7 +185,7 @@ class _AddProductState extends State<AddProduct> {
               Text("Product Detail", style: AppWidget.lightTextFieldStyle()),
               SizedBox(height: 10),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 decoration: BoxDecoration(
                   color: Color(0xFFececf8),
                   borderRadius: BorderRadius.circular(20),
@@ -191,10 +197,7 @@ class _AddProductState extends State<AddProduct> {
                 ),
               ),
               SizedBox(height: 20),
-              Text(
-                "Product Category",
-                style: AppWidget.lightTextFieldStyle(),
-              ),
+              Text("Product Category", style: AppWidget.lightTextFieldStyle()),
               SizedBox(height: 10),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10),
@@ -205,20 +208,22 @@ class _AddProductState extends State<AddProduct> {
                 ),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
-                    items: categoryitem
-                        .map(
-                          (item) => DropdownMenuItem(
-                            value: item,
-                            child: Text(
-                              item,
-                              style: AppWidget.semiboldTextFieldStyle(),
-                            ),
-                          ),
-                        )
-                        .toList(),
-                    onChanged: ((value) => setState(() {
-                      this.value = value!;
-                    })),
+                    items:
+                        categoryitem
+                            .map(
+                              (item) => DropdownMenuItem(
+                                value: item,
+                                child: Text(
+                                  item,
+                                  style: AppWidget.semiboldTextFieldStyle(),
+                                ),
+                              ),
+                            )
+                            .toList(),
+                    onChanged:
+                        ((value) => setState(() {
+                          this.value = value!;
+                        })),
                     dropdownColor: Colors.white,
                     hint: Text("Select Category"),
                     iconSize: 36,
